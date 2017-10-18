@@ -1,0 +1,290 @@
+<div class="container" >
+  <p id="notice"><%= notice %></p>
+
+    <div class="row">
+      <div class="col-md-3">
+        <h1>Schedules</h1>
+      </div>
+      <% if current_user.roles.first.name == 'admin' %>
+        <% if @schedules.present?  %>
+          <div class="col-md-3">
+            <%= link_to 'View Schedule Requests', schedule_change_requests_scheduler_schedule_path(@schedules), class: 'btn btn-primary' %>
+          </div>
+        <% else %>
+          <div class="col-md-3">
+            <%= link_to 'New Schedule', new_scheduler_schedule_path(user_id: @user_id), class: 'btn btn-primary ' %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3">
+        <h4> Date </h4>
+      </div>
+      <div class="col-md-3">
+        <h4> Start Time </h4>
+      </div>
+      <div class="col-md-3">
+        <h4> End Time </h4>
+      </div>
+      <div class="col-md-3">
+        <h4> Actions </h4>
+      </div>
+    </div>
+
+
+    <% if @schedules.present? %>
+      <% if @schedules.repeat_to.present? %>
+        <% if @schedules.repeat_to > Date.today %>
+          <% days_string = JSON.parse @schedules.days %>
+          <% monday = days_string["monday"] %>
+          <% tuesday = days_string["tuesday"] %>
+          <% wednesday = days_string["wednesday"] %>
+          <% thursday = days_string["thursday"] %>
+          <% friday = days_string["friday"] %>
+          <% saturday = days_string["saturday"] %>
+          <% sunday = days_string["sunday"] %>
+
+
+          <% sd = Date.today %>
+          <%= sd.upto(@schedules.repeat_to).each do |day| %>
+              <% day1 = day.to_s %>
+              <% if days_string[day1].present? and days_string[day1]["changerequest"] == "approved" %>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <%= day %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= days_string[day1]["start_time"] %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= days_string[day1]["end_time"] %>
+                    </div>
+
+
+                    <% current_scheduler_datetime = day1 + " " + days_string[day1]["start_time"] %>
+                    <% current_scheduler_datetime = current_scheduler_datetime.to_datetime %>
+                    <% comparison_datetime = Time.now + 24.hours %>
+                    <% if current_scheduler_datetime > comparison_datetime and current_user.roles.first.name != "admin" %>
+                      <div class="col-md-3">
+                        <%= link_to 'Schedule Change Request',  edit_scheduler_schedule_path(@schedules, user_id: @user_id, date: day) %>
+                      </div>
+                    <% end %> 
+                  </div>
+
+              <% else %>
+                <% if day.wday == 0 and sunday["start_time"].present? and sunday["end_time"].present? %>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <%= day %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= sunday["start_time"] %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= sunday["end_time"] %>
+                    </div>
+
+                    <% if days_string[day1].present? and days_string[day1]["changerequest"] == "true" %>
+                      <%= "Schedule Change Request Sent" %>
+                    <% else %>
+                      <% current_scheduler_datetime = day1 + " " + sunday["start_time"] %>
+                      <% current_scheduler_datetime = current_scheduler_datetime.to_datetime %>
+                      <% comparison_datetime = Time.now + 24.hours %>
+                      <% if current_scheduler_datetime > comparison_datetime and current_user.roles.first.name != "admin" %>
+                        <div class="col-md-3">
+                          <%= link_to 'Schedule Change Request',  edit_scheduler_schedule_path(@schedules, user_id: @user_id, date: day) %>
+                        </div>
+                      <% end %>
+                    <% end %>
+                  </div>
+
+
+                <% elsif day.wday == 1 and monday["start_time"].present? and monday["end_time"].present? %>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <%= day %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= monday["start_time"] %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= monday["end_time"] %>
+                    </div>
+
+                    <% if days_string[day1].present? and days_string[day1]["changerequest"] == "true" %>
+                      <%= "Schedule Change Request Sent" %>
+                    <% else %>
+                      <% current_scheduler_datetime = day1 + " " + monday["start_time"] %>
+                      <% current_scheduler_datetime = current_scheduler_datetime.to_datetime %>
+                      <% comparison_datetime = Time.now + 24.hours %>
+                      <% if current_scheduler_datetime > comparison_datetime and current_user.roles.first.name != "admin" %>
+                        <div class="col-md-3">
+                          <%= link_to 'Schedule Change Request',  edit_scheduler_schedule_path(@schedules, user_id: @user_id, date: day) %>
+                        </div>
+                      <% end %>
+                    <% end %>
+                  </div>
+
+                <% elsif day.wday == 2 and tuesday["start_time"].present? and tuesday["end_time"].present? %>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <%= day %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= tuesday["start_time"] %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= tuesday["end_time"] %>
+                    </div>
+
+                    <% if days_string[day1].present? and days_string[day1]["changerequest"] == "true" %>
+                      <%= "Schedule Change Request Sent" %>
+                    <% else %>
+                      <% current_scheduler_datetime = day1 + " " + tuesday["start_time"] %>
+                      <% current_scheduler_datetime = current_scheduler_datetime.to_datetime %>
+                      <% comparison_datetime = Time.now + 24.hours %>
+                      <% if current_scheduler_datetime > comparison_datetime and current_user.roles.first.name != "admin" %>
+                        <div class="col-md-3">
+                          <%= link_to 'Schedule Change Request',  edit_scheduler_schedule_path(@schedules, user_id: @user_id, date: day) %>
+                        </div>
+                      <% end %>
+                    <% end %>
+                  </div>
+
+                <% elsif day.wday == 3 and wednesday["start_time"].present? and wednesday["end_time"].present? %>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <%= day %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= wednesday["start_time"] %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= wednesday["end_time"] %>
+                    </div>
+                    <% if days_string[day1].present? and days_string[day1]["changerequest"] == "true" %>
+                      <%= "Schedule Change Request Sent" %>
+                    <% else %>
+                      <% current_scheduler_datetime = day1 + " " + wednesday["start_time"] %>
+                      <% current_scheduler_datetime = current_scheduler_datetime.to_datetime %>
+                      <% comparison_datetime = Time.now + 24.hours %>
+                      <% if current_scheduler_datetime > comparison_datetime and current_user.roles.first.name != "admin" %>
+                        <div class="col-md-3">
+                          <%= link_to 'Schedule Change Request',  edit_scheduler_schedule_path(@schedules, user_id: @user_id, date: day) %>
+                        </div>
+                      <% end %>                 
+                    <% end %>
+                  </div>
+
+
+                <% elsif day.wday == 4 and thursday["start_time"].present? and thursday["end_time"].present? %>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <%= day %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= thursday["start_time"] %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= thursday["end_time"] %>
+                    </div>
+
+                    <% if days_string[day1].present? and days_string[day1]["changerequest"] == "true" %>
+                      <%= "Schedule Change Request Sent" %>
+                    <% else %>
+                      <% current_scheduler_datetime = day1 + " " + thursday["start_time"] %>
+                      <% current_scheduler_datetime = current_scheduler_datetime.to_datetime %>
+                      <% comparison_datetime = Time.now + 24.hours %>
+                      <% if current_scheduler_datetime > comparison_datetime and current_user.roles.first.name != "admin" %>
+                        <div class="col-md-3">
+                          <%= link_to 'Schedule Change Request',  edit_scheduler_schedule_path(@schedules, user_id: @user_id, date: day) %>
+                        </div>
+                      <% end %>                 
+                    <% end %>
+                  </div> 
+
+                <% elsif day.wday == 5 and friday["start_time"].present? and friday["end_time"].present? %>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <%= day %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= friday["start_time"] %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= friday["end_time"] %>
+                    </div>
+
+                    <% if days_string[day1].present? and days_string[day1]["changerequest"] == "true" %>
+                      <%= "Schedule Change Request Sent" %>
+                    <% else %>
+                      <% current_scheduler_datetime = day1 + " " + friday["start_time"] %>
+                      <% current_scheduler_datetime = current_scheduler_datetime.to_datetime %>
+                      <% comparison_datetime = Time.now + 24.hours %>
+                      <% if current_scheduler_datetime > comparison_datetime and current_user.roles.first.name != "admin" %>
+                        <div class="col-md-3">
+                          <%= link_to 'Schedule Change Request',  edit_scheduler_schedule_path(@schedules, user_id: @user_id, date: day) %>
+                        </div>
+                      <% end %>                 
+                    <% end %>
+                  </div> 
+
+                <% elsif day.wday == 6 and saturday["start_time"].present? and saturday["end_time"].present? %>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <%= day %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= saturday["start_time"] %>
+                    </div>
+                    <div class="col-md-3">
+                      <%= saturday["end_time"] %>
+                    </div>
+
+                    <% if days_string[day1].present? and days_string[day1]["changerequest"] == "true" %>
+                      <%= "Schedule Change Request Sent" %>
+                    <% else %>
+                      <% current_scheduler_datetime = day1 + " " + saturday["start_time"] %>
+                      <% current_scheduler_datetime = current_scheduler_datetime.to_datetime %>
+                      <% comparison_datetime = Time.now + 24.hours %>
+                      <% if current_scheduler_datetime > comparison_datetime and current_user.roles.first.name != "admin" %>
+                        <div class="col-md-3">
+                          <%= link_to 'Schedule Change Request',  edit_scheduler_schedule_path(@schedules, user_id: @user_id, date: day) %>
+                        </div>
+                      <% end %>                 
+                    <% end %>
+                  </div>
+                <% end %>
+              <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+
+
+
+  <!--table>
+    <thead>
+      <tr>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%# @schedules.each do |schedule| %>
+        <tr>
+
+          <td><%#= link_to 'Show', scheduler_schedule_path %></td>
+          <td><%#= link_to 'Edit', edit_scheduler_schedule_path(schedule) %></td>
+          <td><%#= link_to 'Destroy', scheduler_schedule_path, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <#% end %>
+    </tbody>
+  </table-->
+
+  <br>
+
+  
+</div>

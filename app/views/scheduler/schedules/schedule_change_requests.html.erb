@@ -1,0 +1,33 @@
+<% @array.each do |schedule| %>
+	
+	<div class="container">
+		<h2> Schedule Requests Approval/Rejection </h2>
+
+		<div class="row">
+			<div class="col-md-1">
+				Date 
+			</div>
+			<div class="col-md-2">
+				<%= schedule[0] %>
+			</div>
+			<div class="col-md-1">
+				Start Time
+			</div>
+			<div class="col-md-1">
+				<%= schedule[1]["start_time"] %>
+			</div>
+			<div class="col-md-1">
+				End Time
+			</div>
+			<div class="col-md-1">
+				<%= schedule[1]["end_time"] %>
+			</div>
+			<div class="col-md-1">
+				<%= link_to 'Approved' , approve_request_scheduler_schedule_path(@schedule, date: schedule) %>
+			</div>
+			<div class="col-md-1">
+				<%= link_to 'Reject', 	 reject_request_scheduler_schedule_path(@schedule, date: schedule) %>
+			</div>
+		</div>
+	</div>
+<% end %>

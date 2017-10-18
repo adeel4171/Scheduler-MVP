@@ -1,0 +1,16 @@
+<div class="container">
+	<h1>Editing Schedule</h1>
+	<div class="row">
+		<div class="col-md-2">
+			<h5> Date </h5>
+		</div>
+		<div class="col-md-2">
+			<h5> <%= @date %> </h5>
+		</div>
+	</div>
+
+	<%= render 'edit_form', schedule: @schedule, user_id: @user_id, date: @date %>
+</div>
+
+<%#= link_to 'Show', @schedule %> |
+<%#= link_to 'Back', schedules_path %>
