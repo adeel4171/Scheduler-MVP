@@ -28,7 +28,9 @@
           <td><%= user.name %></td>
           <td><%= user.gender %></td>
           <td><%= user.email %></td>
-          <td><%= link_to 'View Schedules', scheduler_schedules_path(user_id: user.id) %>
+          <% if user.roles.first.name != "admin" %>
+            <td><%= link_to 'View Schedules', scheduler_schedules_path(user_id: user.id) %>
+          <% end %>
           <!--td><%#= link_to 'Show', scheduler_user_path(user) %></td-->
           <!--td><%#= link_to 'Edit', edit_scheduler_user_path(user) %></td-->
           <!--td><%#= link_to 'Destroy', scheduler_user_path(user), method: :delete, data: { confirm: 'Are you sure?' } %></td-->
